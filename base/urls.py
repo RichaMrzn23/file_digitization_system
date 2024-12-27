@@ -18,8 +18,8 @@ urlpatterns = [
     path('auto_log/<int:pk>', Auto_LogView.as_view({'get':'retrive', 'put':'update', 'delete':'destroy'})),
     path('feedback/', FeedbackView.as_view({'get':'list', 'post': 'create'})),
     path('feedback/<int:pk>', FeedbackView.as_view({'get':'retrive', 'put':'update', 'delete':'destroy'})),
-    path('register/', register),
-    path('login/', login),
+    path('register/', RegistrationAPIView.as_view(), name='register'),
+    path('login/', LoginAPIView.as_view(), name='login'),
 ]
 
 if settings.DEBUG:
