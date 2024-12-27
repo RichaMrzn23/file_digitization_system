@@ -4,8 +4,8 @@ from django.conf import settings
 from django.conf.urls.static import static
 
 urlpatterns = [
-    path('users/', UserView.as_view({'get':'list', 'post':'create'})),
-    path('users/<int:pk>', UserView.as_view({'get':'retrieve', 'put':'update', 'delete':'destroy'})),
+    path('user/', UserView.as_view({'get':'list', 'post':'create'})),
+    path('user/<int:pk>', UserView.as_view({'get':'retrieve', 'put':'update', 'delete':'destroy'})),
     path('department/', DepartmentView.as_view({'get':'list', 'post':'create'})),
     path('department/<int:pk>', DepartmentView.as_view({'get':'retrieve', 'put':'update', 'delete':'destroy'})),
     path('user_profile/', User_ProfileView.as_view({'get':'list', 'post':'create'})),
@@ -18,7 +18,8 @@ urlpatterns = [
     path('auto_log/<int:pk>', Auto_LogView.as_view({'get':'retrive', 'put':'update', 'delete':'destroy'})),
     path('feedback/', FeedbackView.as_view({'get':'list', 'post': 'create'})),
     path('feedback/<int:pk>', FeedbackView.as_view({'get':'retrive', 'put':'update', 'delete':'destroy'})),
-    
+    path('register/', register),
+    path('login/', login),
 ]
 
 if settings.DEBUG:
