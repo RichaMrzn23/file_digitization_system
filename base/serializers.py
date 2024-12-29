@@ -30,6 +30,16 @@ class Audit_LogSerializer(serializers.ModelSerializer):
         model = Audit_Log
         fields = '__all__'  
 
+class Backup_FileSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Backup_File
+        fields = '__all__'
+
+class Recovery_FileSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Recovery_File
+        fields = '__all__'
+
 class FeedbackSerializer(serializers.ModelSerializer):
     class Meta:
         model = Feedback

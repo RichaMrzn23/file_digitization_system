@@ -2,12 +2,14 @@ from django.db import models
 from django.contrib.auth.models import AbstractUser
 # Create your models here.
 
-USER_ROLES=[
+
+class User(AbstractUser):
+    USER_ROLES=[
     ('admin', 'Admin'),
     ('manager', 'Manager'),
-    ('regular_user', 'Regular_User')
-]
-class User(AbstractUser):
+    ('regular_user', 'Regular_User'),
+    
+    ]
     email = models.EmailField(unique=True)
     password = models.CharField(max_length=50)
     username = models.CharField(max_length=50, default='username')
@@ -62,6 +64,44 @@ class Audit_Log(models.Model):
     action = models.CharField(max_length= 50, choices= ACTION_CHOICES)
     timestamp = models.DateField()
     details = models.CharField(max_length=100)
+
+class Backup_File(models.Model):
+    BACKUP_TYPES = [
+        ('FULL', 'Full Backup'),
+        ('INCREMENTAL', 'Incremental Backup'),
+        ('DIFFERENTIAL', 'Differential Backup'),
+    ]
+    
+    BACKUP_STATUS = [
+        ('SUCCESS', 'Success'),
+        ('FAILED', 'Failed'),
+        ('IN_PROGRESS', 'In Progress'),
+    ]
+    file = models.ForeignKey(File, on_delete=models.CASCADE, related_name='backups')
+    backup_file_name = models.CharField(max_length=255)
+    backup_file_path = models.FileField(upload_to='backups/') 
+    backup_date = models.DateTimeField(auto_now_add=True)
+    backup_type = models.CharField(max_length=20, choices=BACKUP_TYPES)
+    backup_status = models.CharField(max_length=20, choices=BACKUP_STATUS, default='IN_PROGRESS')
+    performed_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, related_name='backup_performed')
+    checksum = models.CharField(max_length=255, null=True, blank=True)
+
+class Recovery_File(models.Model):
+    RECOVERY_STATUS = [
+        ('SUCCESS', 'Success'),
+        ('FAILED', 'Failed'),
+        ('PARTIAL', 'Partial Recovery'),
+    ]
+    
+    backup = models.OneToOneField(Backup_File, on_delete=models.CASCADE, related_name='recovery')
+    original_file = models.ForeignKey(File, on_delete=models.CASCADE, related_name='recoveries')
+    recovery_date = models.DateTimeField(auto_now_add=True)
+    recovered_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, related_name='recovery_performed')
+    recovery_status = models.CharField(max_length=20, choices=RECOVERY_STATUS)
+    recovery_location = models.FileField(upload_to='recovery/') 
+    notes = models.TextField(null=True, blank=True)
+    
+    
 
 class Feedback(models.Model):
     user = models.ForeignKey(User, on_delete = models.CASCADE, related_name='feedbacks')

@@ -10,6 +10,7 @@ from django.contrib.auth.hashers import make_password
 from rest_framework.authtoken.models import Token
 from rest_framework.permissions import AllowAny
 from rest_framework.exceptions import AuthenticationFailed
+from .permissions import *
 # Create your views here.
 
 class UserView(ModelViewSet):
@@ -19,7 +20,7 @@ class UserView(ModelViewSet):
 class DepartmentView(ModelViewSet):
     queryset = Department.objects.all()
     serializer_class = DepartmentSerializer
-
+    permission_classes = [IsAdminOnly|IsManagerOnly|IsRegularUserOnly]
 class User_ProfileView(ModelViewSet):
     queryset = User_Profile.objects.all()
     serializer_class = User_ProfileSerializer
@@ -37,6 +38,14 @@ class MetadataView(ModelViewSet):
 class Auto_LogView(ModelViewSet):
     queryset = Audit_Log.objects.all()
     serializer_class = Audit_LogSerializer
+
+class Backup_FileView(ModelViewSet):
+    queryset = Backup_File.objects.all()
+    serializer_class = Backup_FileSerializer
+
+class Recovery_FileView(ModelViewSet):
+    queryset = Recovery_File.objects.all()
+    serializer_class = Recovery_FileSerializer
 
 class FeedbackView(ModelViewSet):
     queryset = Feedback.objects.all()
