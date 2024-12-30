@@ -7,11 +7,15 @@ from rest_framework.response import Response
 from rest_framework import status
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.hashers import make_password
+from rest_framework.authtoken.views import ObtainAuthToken
 from rest_framework.authtoken.models import Token
 from rest_framework.permissions import AllowAny
 from rest_framework.exceptions import AuthenticationFailed
 from .permissions import *
 # Create your views here.
+
+
+     
 
 class UserView(ModelViewSet):
     queryset = User.objects.all()
@@ -125,7 +129,7 @@ class LoginAPIView(APIView):
         password=request.data.get('password')
         if not email or not password:
             raise AuthenticationFailed('Missing credentials') # raise error if credentials are not complete
-        user = authenticate(request, email = email, pasword= password)
+        user = authenticate(request, username = email, password= password)
         if user is not None:
             login(request, user)
             token, created = Token.objects.get_or_create(user=user)

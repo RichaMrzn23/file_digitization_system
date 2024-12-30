@@ -4,8 +4,9 @@ from django.conf import settings
 from django.conf.urls.static import static
 
 urlpatterns = [
-    path('user/', UserView.as_view({'get':'list', 'post':'create'})),
-    path('user/<int:pk>', UserView.as_view({'get':'retrieve', 'put':'update', 'delete':'destroy'})),
+    path('register/', RegistrationAPIView.as_view(), name='register'),
+    path('login/', LoginAPIView.as_view(), name='login'),
+    # path('user/<int:pk>', .as_view({'get':'retrieve', 'put':'update', 'delete':'destroy'})),
     path('department/', DepartmentView.as_view({'get':'list', 'post':'create'})),
     path('department/<int:pk>', DepartmentView.as_view({'get':'retrieve', 'put':'update', 'delete':'destroy'})),
     path('user_profile/', User_ProfileView.as_view({'get':'list', 'post':'create'})),

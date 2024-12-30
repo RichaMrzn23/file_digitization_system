@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
+from django.dispatch import receiver
 # Create your models here.
 
 
@@ -107,3 +108,11 @@ class Feedback(models.Model):
     user = models.ForeignKey(User, on_delete = models.CASCADE, related_name='feedbacks')
     viewed_date = models.DateField()
     message = models.CharField(max_length=100)
+
+# post save is used to create backup file after saved in database
+@receiver(models.signals.post_save, sender=File)
+def file_created_backup(sender, instance, created,**kwargs):
+    if created:
+        Backup_File.objects.create(file=instance)
+    else:
+        pass
